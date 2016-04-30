@@ -75,24 +75,5 @@ var Repository = function(){
 		});
 	};
 
-	public.getLanguageListFromStarredRepositories = function () {
-		var i = 0,
-			item,
-			options = [];
-
-		if(typeof userName !== 'string'){
-			return [];
-		}
-
-		for (; i < starredRepositories.length; i++) {
-			item = starredRepositories[i];
-			if(item.language && options.indexOf(item.language) === -1) {
-				options.push(item.language);
-			}
-		}
-
-		return options;
-	};
-
 	return public;
 };

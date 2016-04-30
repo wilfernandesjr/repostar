@@ -195,8 +195,8 @@ h4 {
 }
 .Card-name {
     width: 100%;
-    text-align: center;
-    padding: 8px 0;
+    text-align: left;
+    padding: 8px;
     color: #fff;
     background: #00695C;
 }
@@ -224,6 +224,45 @@ h4 {
     text-align: center;
     float: left;
     font-size: 0.8em;
+}
+.Card-language {
+    height: 39px;
+    padding: 12px 10px;
+    background: #00796B;
+    color: #fff;
+    font-weight: 400;
+    font-size: 0.8em;
+    z-index: 1;
+    border-radius: 0 5px 0 0;
+    top: 0;
+    right: 0;
+}
+.Card-owner {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.80);
+    color: #00695C;
+    font-weight: 400;
+    font-size: 0.9em;
+    z-index: 1;
+    bottom: 3px;
+    left: 0;
+}
+
+
+.Filter {
+    width: 100%;
+    padding: 20px;
+    background: #E0E0E0;
+}
+.Filter-itemSelect {
+    width: 250px;
+    height: 35px;
+    float: left;
+    text-align: center;
+    margin-right: 25px;
+    font-size: 0.8em;
+    color: #37474F;
+    border: 1px solid #B0BEC5;
 }
 /* :Modules */
 
