@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+   <meta charset="UTF-8">
+   <title>Teste core reposity.js</title>
+   <script type="text/javascript" src="/lib/atomic.js"></script>
+   <script type="text/javascript" src="/core/repository.js"></script>
+
+   <script type="text/javascript">
+   		var repository = Repository();
+
+		repository.setUserName("wilfernandesjr", function(error, userExists) {
+			if(userExists) {
+				console.log("O usuário existe");
+				getNext();
+			} else {
+				console.log("O usuário não existe");
+			}
+		});
+
+		function getNext() {
+			repository.getNextUserStarredRepoPage(function(error, pageData){
+				if(error) {
+					console.log("Ocorreu um erro.", error);
+				} else {
+					if(pageData.length) {
+						console.log("O resultado da próxima página é ", pageData);
+					} else {
+						console.log("Não foram encontrados resultado.");
+					}
+				}
+			});
+		}
+   </script>
+</head>
+
+<body>
+
+
+</body>
+</html>
