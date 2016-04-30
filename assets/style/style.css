@@ -102,6 +102,7 @@ h4 {
     height: 100px;
     background: #1A2226;
     overflow: hidden;
+	z-index: 2;
 }
 .l-main {
     width: 100%;
@@ -253,7 +254,14 @@ h4 {
     width: 100%;
     padding: 20px;
     background: #E0E0E0;
+	transition: transform .3s ease-in-out;
+	z-index: 1;
 }
+
+.is-waiting .Filter {
+	transform: translateY(-100%);
+}
+
 .Filter-itemSelect {
     width: 250px;
     height: 35px;

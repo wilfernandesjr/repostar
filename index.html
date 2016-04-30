@@ -2,17 +2,16 @@
 <html lang="PT-BR">
 <head>
     <meta charset="UTF-8">
-    <title>List user's starred repos</title>
+    <title>RepoStars - a list user's starred repositories</title>
 
     <!--Web fonts:-->
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:100,300,400,600,700' rel='stylesheet' type='text/css'>
     <!--:Web fonts-->
 
-    <link href='/assets/style/style.css' rel='stylesheet' type='text/css'>
-
+    <link href='/dist/style/style.min.css' rel='stylesheet' type='text/css'>
 </head>
 
-<body class="js-app">
+<body class="js-app is-waiting">
 
     <header class="l-header">
         <h1 class="Brand">
@@ -20,17 +19,17 @@
         </h1>
 
         <section class="SearchUser">
-            <input type="text" class="SearchUser-input js-search-input" placeholder="Insira um usuário do GitHub" value="rhiros">
+            <input type="text" autofocus class="SearchUser-input js-search-input" placeholder="Insira um usuário do GitHub">
             <button class="SearchUser-button js-search-button">EXIBIR</button>
         </section>
     </header>
 
     <nav class="Filter u-clearfix">
-        <select class="Filter-itemSelect u-relative">
-            <option value="default">Sort by</option>
-            <option value="">Ordem Alfabética</option>
-            <option value="">Star count</option>
-            <option value="">Open issues count</option>
+        <select class="Filter-itemSelect u-relative js-sort-select">
+            <option value="">Sort by</option>
+            <option value="alphabetic">Alphabetical order</option>
+            <option value="stars">Star count</option>
+            <option value="open_ussues">Open issues count</option>
         </select>
 
         <select class="Filter-itemSelect u-relative js-language-select"></select>
@@ -38,9 +37,9 @@
 
     <section class="l-main u-wrapper">
         <section class="ListCards">
-            <h2 class="ListCards-title">
+            <!-- <h2 class="ListCards-title">
                 <span class="ListCards-user">{{userName}}</span> starred <span class="ListCards-qtd">{{qtd}}</span> repositories.
-            </h2>
+            </h2> -->
 
             <section class="ListCards-wrapper u-clearfix js-content"></section>
 			<button class="ListCards-btnMore js-load-more" style="display:none">Carregar mais</button>
@@ -77,9 +76,7 @@
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
-    <script type="text/javascript" src="/lib/atomic.js"></script>
-    <script type="text/javascript" src="/core/repository.js"></script>
-    <script type="text/javascript" src="/core/plugin.js"></script>
+    <script type="text/javascript" src="/dist/js/app.js"></script>
 
     <script type="text/javascript">
     $(function() {

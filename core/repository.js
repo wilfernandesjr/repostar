@@ -3,7 +3,9 @@ var Repository = function(){
 	var public = {},
 		userName,
 		githubApiUrl = "https://api.github.com/",
-		starredRepositories = [];
+		starredRepositories = [],
+		pageSize = 10,
+		actualPage = 0;
 
 	function getValidaCallback(callback) {
 		if(typeof callback !== 'function') {
@@ -13,24 +15,16 @@ var Repository = function(){
 		return callback;
 	}
 
-	public.getNextUserStarredRepoPage = (function() {
-		var actualPage = 0,
-			pageSize;
-
-		return function (callback) {
+	public.getNextUserStarredRepoPage = function (callback) {
 			if(typeof userName !== 'string'){
 				throw "O user name precisa ser especificado";
 			}
 
 			callback = getValidaCallback(callback);
 
-			atomic.get(githubApiUrl + 'users/' + userName + '/starred?page=' + (actualPage + 1))
+			atomic.get(githubApiUrl + 'users/' + userName + '/starred?page=' + (actualPage + 1) + '&per_page=' + pageSize)
 			.success(function (pageData) {
 				if(pageData.length !== 0) {
-					if(!pageSize) {
-						pageSize = pageData.length;
-					}
-
 					starredRepositories = starredRepositories.concat(pageData);
 					actualPage++;
 				}
@@ -43,8 +37,6 @@ var Repository = function(){
 
 		};
 
-	})();
-
 	public.getUserStarredRepositories = function () {
 		return starredRepositories;
 	};
@@ -56,6 +48,11 @@ var Repository = function(){
 
 		callback = getValidaCallback(callback);
 
+		if(user === userName) {
+			callback(null, true);
+			return;
+		}
+
 		atomic
 		.get(githubApiUrl + 'search/users?q=' + user)
 		.success(function(data){
@@ -63,6 +60,8 @@ var Repository = function(){
 				userName = user;
 
 				starredRepositories = [];
+				actualPage = 0;
+
 				userName = user.toLowerCase();
 
 				callback(null, true);
@@ -73,6 +72,10 @@ var Repository = function(){
 		.error(function (error) {
 			callback(error);
 		});
+	};
+
+	public.getPageSize = function getPageSize() {
+		return pageSize;
 	};
 
 	return public;

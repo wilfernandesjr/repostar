@@ -5,17 +5,19 @@
 			repository = Repository(),
 			starredReposityList = [],
 			userName,
-			isLoading = false;
+			isLoading = false,
+			app =  jQuery(this);
 
 		elements.search = {};
-		elements.search.button = jQuery('.js-search-button');
-		elements.search.input = jQuery('.js-search-input');
+		elements.search.button = app.find('.js-search-button');
+		elements.search.input = app.find('.js-search-input');
 
-		elements.content = jQuery('.js-content');
-		elements.btLoadMore = jQuery('.js-load-more');
-		elements.languageSelect = jQuery('.js-language-select');
+		elements.content = app.find('.js-content');
+		elements.btLoadMore = app.find('.js-load-more');
+		elements.languageSelect = app.find('.js-language-select');
+		elements.sortSelect = app.find('.js-sort-select');
 
-		template = jQuery("#templateRepository").html();
+		template = app.find("#templateRepository").html();
 
 		function renderTemplate(template, data) {
 
@@ -52,6 +54,9 @@
 
 		function render(starredReposityList) {
 			var i = 0;
+
+			starredReposityList = sortListBySelectedValue(starredReposityList);
+
 			for(; i < starredReposityList.length; i++) {
 				elements.content.append(renderTemplate(template, formatItem(starredReposityList[i])));
 			}
@@ -59,16 +64,71 @@
 
 		function paginate() {
 			if(isLoading) return;
+
 			repository.getNextUserStarredRepoPage(function (err, pageData) {
 				if(!err && pageData.length) {
 					elements.btLoadMore.show();
 					starredReposityList = starredReposityList.concat(pageData);
+
+					elements.sortSelect.val("");
 					updateLanguageFilter(starredReposityList);
 					render(pageData);
-				} else {
+				}
+
+				if(pageData.length < repository.getPageSize()) {
 					elements.btLoadMore.hide();
 				}
 			});
+
+			elements.sortSelect.off("change");
+			elements.sortSelect.on("change", function(){
+				elements.content.empty();
+				render(starredReposityList);
+			});
+		}
+
+		function sortListBySelectedValue(starredReposityList) {
+			var sortOption = jQuery(".js-sort-select").val();
+
+			if(sortOption !== "") {
+				switch(sortOption) {
+					case "alphabetic": {
+						return starredReposityList.sort(function(before, after) {
+							if(before.name.toLowerCase() < after.name.toLowerCase()) {
+								return -1;
+							} else if(before.name.toLowerCase() > after.name.toLowerCase()) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+					}
+					case "stars": {
+						return starredReposityList.sort(function(before, after) {
+							if(before.stargazers_count > after.stargazers_count) {
+								return -1;
+							} else if(before.stargazers_count < after.stargazers_count) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+					}
+					case "open_ussues": {
+						return starredReposityList.sort(function(before, after) {
+							if(before.open_issues_count > after.open_issues_count) {
+								return -1;
+							} else if(before.open_issues_count < after.open_issues_count) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+					}
+				}
+			}
+
+			return starredReposityList;
 		}
 
 		function getLanguageListFromStarredRepositories (starredReposityList) {
@@ -108,28 +168,48 @@
 
 		elements.btLoadMore.on("click", paginate);
 		elements.languageSelect.on("change", function(){
-			var filteredList,
+			var list,
 				selected = jQuery(this).val();
 
 			elements.content.empty();
+			elements.btLoadMore.hide();
 
 			if(selected !== "") {
-				filteredList = filterByLanguage(starredReposityList, selected);
-				render(filteredList);
+				list = filterByLanguage(starredReposityList, selected);
 			} else {
-				render(starredReposityList);
+				list = starredReposityList;
+				elements.btLoadMore.show();
 			}
+
+			render(list);
+
+			elements.sortSelect.off("change");
+			elements.sortSelect.on("change", function(){
+				elements.content.empty();
+				render(list);
+			});
 		});
 
 		elements.search.button.bind("click", function() {
+			var _userName;
 			if(isLoading) return;
-			isLoading = true;
 
-			repository.setUserName(elements.search.input.val(), function (err, userExists) {
+			_userName = elements.search.input.val();
+			if(userName === _userName) return;
+
+			isLoading = true;
+			app.addClass("is-waiting");
+
+			repository.setUserName(_userName, function (err, userExists) {
 				isLoading = false;
 				if(userExists) {
+					userName = _userName;
 					elements.search.input.removeClass("is-error");
+					app.removeClass("is-waiting");
+
 					elements.content.empty();
+					starredReposityList = [];
+
 					paginate();
 				} else {
 					elements.search.input.addClass("is-error");

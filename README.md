@@ -4,11 +4,18 @@ RepoStar exibe uma lista com todos os repositórios no GitHub que um usuário es
 
 ## Bibliotecas usadas
 
-#### - jQuery (v1.9.1)
+#### jQuery (v1.9.1)
 
-#### - Atomic.js
+#### Atomic.js
 Atomic.js é um módulo independente de 2kb para obter uma instância XHR, fazendo solicitações HTTP e manipulando callbacks de sucesso/erro.
 
-## Como rodar localmente
+## Requisitos
 
+#### - Node.js (v0.10.35)
+#### - npm (v1.4.28)
 
+## Como usar localmente
+
+Para instalar o RepoStar localmente, clone este repositório em um diretório desejado rodar o seguinte comando:
+
+```npm start```
