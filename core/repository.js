@@ -24,7 +24,7 @@ var Repository = function(){
 
 			callback = getValidaCallback(callback);
 
-			atomic.get('https://api.github.com/users/wilfernandesjr/starred?page=' + (actualPage + 1))
+			atomic.get(githubApiUrl + 'users/' + userName + '/starred?page=' + (actualPage + 1))
 			.success(function (pageData) {
 				if(pageData.length !== 0) {
 					if(!pageSize) {
