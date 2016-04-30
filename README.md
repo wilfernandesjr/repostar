@@ -19,3 +19,5 @@ Atomic.js é um módulo independente de 2kb para obter uma instância XHR, fazen
 Para instalar o RepoStar localmente, clone este repositório em um diretório desejado rodar o seguinte comando:
 
 ```npm start```
+
+e acessar http://localhost:8000 ;)
